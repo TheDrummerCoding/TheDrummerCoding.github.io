@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversión XML a JSON</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function convertirXML() {
+            var archivo = document.getElementById("archivo-xml").files[0];
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var contenidoXML = event.target.result;
+                $.ajax({
+                    url: "https://tudominio.com/convertir",
+                    type: "POST",
+                    data: contenidoXML,
+                    contentType: "application/xml",
+                    success: function(response) {
+                        var json = JSON.parse(response);
+                        var jsonFormatted = JSON.stringify(json, null, 4);
+                        document.getElementById("resultado-json").textContent = jsonFormatted;
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error al convertir XML a JSON: " + error);
+                    }
+                });
+            };
+            reader.readAsText(archivo);
+        }
+    </script>
+</head>
+<body>
+    <h1>Conversión XML a JSON</h1>
+
+    <input type="file" id="archivo-xml" accept=".xml">
+    <br><br>
+    <button onclick="convertirXML()">Convertir</button>
+    <br><br>
+    <pre id="resultado-json"></pre>
+</body>
+</html>
